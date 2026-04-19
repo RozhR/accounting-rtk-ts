@@ -6,7 +6,7 @@ import {Navigate, Route, Routes} from "react-router";
 function App() {
     // TODO: Implement token retrieval from global state logic
 
-    const token = '';
+    const token = 'vsvssjjdvc';
 
   return (
       <Routes>

@@ -1,20 +1,35 @@
 import {useState} from "react";
 import {useAppDispatch} from "../../app/hooks.ts";
-import {fetchUser} from "../../features/api/accountApi.ts";
+import {useRegisterUserMutation} from "../../features/api/accountApi.ts";
+import {setToken} from "../../features/token/tokenSlice.ts";
 import {createToken} from "../../utils/constants.ts";
 
-const SignIn = () => {
+const SignUp = () => {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const dispatch = useAppDispatch();
+    const [registerUser] = useRegisterUserMutation();
 
-    const handleClickSignIn = () => {
-        dispatch(fetchUser(createToken(login, password)));
+    const handleClickSignUp = async () => {
+        try {
+            const {data, error} = await registerUser({login, password, firstName, lastName});
+            if (error) {
+                console.log('sign up error: ', error);
+            } else {
+                dispatch(setToken(createToken(data.login, password)));
+            }
+        } catch (e) {
+            console.log('unknown error: ', e)
+        }
     }
 
     const handleClickClear = () => {
         setLogin('');
         setPassword('');
+        setFirstName('');
+        setLastName('');
     }
 
     return (
@@ -33,10 +48,24 @@ const SignIn = () => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
             </label>
-            <button onClick={handleClickSignIn}>Sign In</button>
+            <label>First Name:
+                <input
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                />
+            </label>
+            <label>Last Name:
+                <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                />
+            </label>
+            <button onClick={handleClickSignUp}>Sign Up</button>
             <button onClick={handleClickClear}>Clear</button>
         </>
     )
 }
 
-export default SignIn;
+export default SignUp;

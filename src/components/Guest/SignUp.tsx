@@ -1,21 +1,20 @@
 import {useState} from "react";
+import {useAppDispatch} from "../../app/hooks.ts";
+import {fetchUser} from "../../features/api/accountApi.ts";
+import {createToken} from "../../utils/constants.ts";
 
-const SignUp = () => {
+const SignIn = () => {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const dispatch = useAppDispatch();
 
-    const handleClickSignUp = () => {
-        // TODO: Implement sign-up logic
-        alert('Sign up successful!');
+    const handleClickSignIn = () => {
+        dispatch(fetchUser(createToken(login, password)));
     }
 
     const handleClickClear = () => {
         setLogin('');
         setPassword('');
-        setFirstName('');
-        setLastName('');
     }
 
     return (
@@ -34,22 +33,10 @@ const SignUp = () => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
             </label>
-            <label>First Name:
-                <input type="text"
-                       value={firstName}
-                       onChange={(e) => setFirstName(e.target.value)}
-                />
-            </label>
-            <label>Last Name:
-                <input type="text"
-                       value={lastName}
-                       onChange={(e) => setLastName(e.target.value)}
-                />
-            </label>
-            <button onClick={handleClickSignUp}>Sign Up</button>
+            <button onClick={handleClickSignIn}>Sign In</button>
             <button onClick={handleClickClear}>Clear</button>
         </>
-    );
-};
+    )
+}
 
-export default SignUp;
+export default SignIn;

@@ -3,8 +3,6 @@ import {base_url, createToken} from "../../utils/constants.ts";
 import type {UserProfile, UserRegister, UserUpdate} from "../../utils/types";
 import type {RootState} from "../../app/store.ts";
 
-//TODO  Теги и инвалидация кэша
-
 export const registerUser = createAsyncThunk(
     'user/register',
     async (user: UserRegister) => {

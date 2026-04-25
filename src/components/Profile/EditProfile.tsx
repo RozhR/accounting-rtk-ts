@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useAppSelector} from "../../app/hooks.ts";
 import {useFetchUserQuery, useUpdateUserMutation} from "../../features/api/accountApi.ts";
 
@@ -12,6 +12,13 @@ const EditProfile = ({close}: Props) => {
     const token = useAppSelector(state => state.token);
     const {data} = useFetchUserQuery(token);
     const [updateUser] = useUpdateUserMutation();
+
+    useEffect(() => {
+        if (data) {
+            setFirstName(data.firstName);
+            setLastName(data.lastName);
+        }
+    }, [data]);
 
     const handleClickSave = async () => {
         try {

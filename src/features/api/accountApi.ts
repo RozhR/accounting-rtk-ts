@@ -4,8 +4,8 @@ import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 
 export const accountApi = createApi({
     reducerPath: 'account',
+    tagTypes: ['profile'],
     baseQuery: fetchBaseQuery({baseUrl: base_url}),
-    tagTypes: ['User'],
     endpoints: builder => ({
         registerUser: builder.mutation<UserProfile, UserRegister>({
             query: user => ({
@@ -22,8 +22,7 @@ export const accountApi = createApi({
                     Authorization: token
                 }
             }),
-            providesTags: (result) =>
-                result ? [{ type: 'User', id: result.login }] : ['User']
+            providesTags: ['profile']
         }),
         updateUser: builder.mutation<UserProfile, { user: UserUpdate, login: string, token: string }>({
             query: ({user, login, token}) => ({
@@ -34,11 +33,9 @@ export const accountApi = createApi({
                     Authorization: token
                 }
             }),
-            invalidatesTags: (result, error, { login }) => [
-                { type: 'User', id: login }
-            ]
+            invalidatesTags: ['profile']
         }),
-        changePassword: builder.mutation<void, { newPassword: string, token: string, login: string }>({
+        changePassword: builder.mutation<void, { newPassword: string, token: string }>({
             query: ({newPassword, token}) => ({
                 url: '/account/password',
                 method: 'PATCH',
@@ -46,10 +43,7 @@ export const accountApi = createApi({
                 headers: {
                     Authorization: token
                 }
-            }),
-            invalidatesTags: (result, error, { login }) => [
-                { type: 'User', id: login }
-            ]
+            })
         })
     })
 })
